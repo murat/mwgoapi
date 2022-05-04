@@ -1,4 +1,4 @@
-# Merriem Webster Golang API Wrapper
+# Merriam Webster Golang API Wrapper
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/eaa91a77066b494b8c357992f12a979b)](https://www.codacy.com/gh/murat/mwgoapi/dashboard?utm_source=github.com&utm_medium=referral&utm_content=murat/mwgoapi&utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/eaa91a77066b494b8c357992f12a979b)](https://www.codacy.com/gh/murat/mwgoapi/dashboard?utm_source=github.com&utm_medium=referral&utm_content=murat/mwgoapi&utm_campaign=Badge_Coverage)
