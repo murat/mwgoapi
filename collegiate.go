@@ -1,5 +1,10 @@
 package mwgoapi
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // Meta is the metadata for the API.
 type Meta struct {
 	ID        string   `json:"id"`
@@ -18,14 +23,17 @@ type Sound struct {
 	Stat  string `json:"stat"`
 }
 
+// Pronunciation ...
+type Pronunciation struct {
+	MerriemWebster string  `json:"mw"`
+	Sound          *Sound  `json:"sound,omitempty"`
+	AudioURL       *string `json:"audio_url,omitempty"`
+}
+
 // HeadwordInfo is the headword info.
 type HeadwordInfo struct {
-	Headword       string `json:"hw"`
-	Pronunciations []struct {
-		MerriemWebster string `json:"mw"`
-		Sound          Sound  `json:"sound,omitempty"`
-		AudioURL       string `json:"audio_url,omitempty"`
-	}
+	Headword       string          `json:"hw"`
+	Pronunciations []Pronunciation `json:"prs"`
 }
 
 // Collegiate is the Collegiate Dictionary API response.
@@ -37,4 +45,28 @@ type Collegiate struct {
 	Date            string              `json:"date"`
 	Etymologies     [][]string          `json:"et"`
 	Shortdef        []string            `json:"shortdef"`
+}
+
+func (c *Collegiate) UnmarshalJSON(data []byte) error {
+	type CollegiateAlias Collegiate
+	tmp := &struct {
+		*CollegiateAlias
+	}{
+		(*CollegiateAlias)(c),
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return fmt.Errorf("could not unmarshal Collegiate, %w", err)
+	}
+
+	for i := 0; i < len(tmp.Headword.Pronunciations); i++ {
+		sound := tmp.Headword.Pronunciations[i].Sound
+		if sound == nil {
+			continue
+		}
+		audio := sound.Audio
+		audioURL := fmt.Sprintf("%s/%s/%s/%s.%s", AudioBaseURL, AudioFormat, audio[0:1], audio, AudioFormat)
+		c.Headword.Pronunciations[i].AudioURL = &audioURL
+	}
+
+	return nil
 }

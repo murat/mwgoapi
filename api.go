@@ -1,7 +1,6 @@
 package mwgoapi
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -16,7 +15,9 @@ type Handler struct {
 
 const (
 	// BaseURL is the base URL for the API.
-	BaseURL = "https://www.dictionaryapi.com/api/v3/references/collegiate/json"
+	BaseURL      = "https://www.dictionaryapi.com/api/v3/references/collegiate/json"
+	AudioFormat  = "mp3"
+	AudioBaseURL = "https://media.merriam-webster.com/audio/prons/en/us"
 )
 
 // NewClient returns a new Handler.
@@ -45,12 +46,4 @@ func (a *Handler) Get(word string) ([]byte, error) {
 	}
 
 	return b, nil
-}
-
-func (a *Handler) UnmarshalResponse(resp []byte, collegiate interface{}) error {
-	if err := json.Unmarshal(resp, &collegiate); err != nil {
-		return fmt.Errorf("could not unmarshal response: %w", err)
-	}
-
-	return nil
 }
