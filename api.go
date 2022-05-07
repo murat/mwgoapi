@@ -45,5 +45,9 @@ func (a *Handler) Get(word string) ([]byte, error) {
 		return nil, fmt.Errorf("could not read body, err: %w", err)
 	}
 
+	if string(b) == "Invalid API key. Not subscribed for this reference." {
+		return nil, fmt.Errorf("invalid API key")
+	}
+
 	return b, nil
 }
