@@ -25,9 +25,9 @@ type Sound struct {
 
 // Pronunciation ...
 type Pronunciation struct {
-	MerriemWebster string  `json:"mw"`
 	Sound          *Sound  `json:"sound,omitempty"`
 	AudioURL       *string `json:"audio_url,omitempty"`
+	MerriemWebster string  `json:"mw"`
 }
 
 // HeadwordInfo is the headword info.
@@ -38,13 +38,23 @@ type HeadwordInfo struct {
 
 // Collegiate is the Collegiate Dictionary API response.
 type Collegiate struct {
-	Meta            Meta                `json:"meta"`
-	Headword        HeadwordInfo        `json:"hwi"`
-	FunctionalLabel string              `json:"fl"`
-	Inflections     []map[string]string `json:"ins"`
-	Date            string              `json:"date"`
-	Etymologies     [][]string          `json:"et"`
-	Shortdef        []string            `json:"shortdef"`
+	FunctionalLabel string       `json:"fl"`
+	Date            string       `json:"date"`
+	Headword        HeadwordInfo `json:"hwi"`
+	Shortdef        []string     `json:"shortdef"`
+	Inflections     []Inflection `json:"ins"`
+	Etymologies     [][]string   `json:"et"`
+	Meta            Meta         `json:"meta"`
+}
+
+// Inflection is the change of form that words undergo
+// in different grammatical contexts, such as tense or number.
+// A set of one or more inflections is contained in an ins.
+type Inflection struct {
+	Inflection     string  `json:"if"`
+	Cutback        string  `json:"ifc"`
+	Label          string  `json:"il"`
+	Pronunciations []Sound `json:"prs"`
 }
 
 func (c *Collegiate) UnmarshalJSON(data []byte) error {
